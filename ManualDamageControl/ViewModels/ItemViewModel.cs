@@ -12,10 +12,12 @@ using Livet.EventListeners;
 using Livet.Messaging.Windows;
 
 using ManualDamageControl.Models;
+using Reactive.Bindings;
+using Reactive.Bindings.Extensions;
 
 namespace ManualDamageControl.ViewModels
 {
-	public class MainWindowViewModel : ViewModel
+	public class ItemViewModel : ViewModel
 	{
 		/* コマンド、プロパティの定義にはそれぞれ 
 		 * 
@@ -60,38 +62,42 @@ namespace ManualDamageControl.ViewModels
 		 */
 
 
-		#region Items変更通知プロパティ
-		private ItemViewModel[] _Items;
+		public ReactiveProperty<int> Index { get; private set; }
 
-		public ItemViewModel[] Items
+		public ReactiveProperty<bool> HasDamageControl { get; private set; }
+
+		public ReactiveProperty<bool?> IsDamageControl { get; private set; }
+
+		public ReactiveProperty<string> DisplayText { get; private set; }
+
+		private ItemModel model = new ItemModel();
+
+		public ItemViewModel(int index)
 		{
-			get
-			{ return _Items; }
-			set
-			{
-				if (_Items == value)
-					return;
-				_Items = value;
-				RaisePropertyChanged("Items");
-			}
-		}
-		#endregion
+			this.Index = new ReactiveProperty<int>(index);
+		
+			this.HasDamageControl = model
+				.ToReactivePropertyAsSynchronized(x => x.HasDamageControl); // HasDamageControlプロパティと双方向で同期するReactivePropertyを作る
+
+			this.IsDamageControl = model
+				.ToReactivePropertyAsSynchronized(x => x.IsDamageControl);
+
+			this.DisplayText = model
+				.ObserveProperty(x => x.DisplayText) // DisplayTextプロパティを監視するIObservableに変換
+				.ToReactiveProperty(); // ReactivePropertyに変換
 
 
-		public MainWindowViewModel()
-		{
-			var items = new ItemViewModel[6];
-			for (int i = 0; i < items.Length; i++)
-			{
-				items[i] = new ItemViewModel(i+1);
-			}
 
-			this.Items = items;
+			/*this.Age = model
+				.ToReactivePropertyAsSynchronized(
+					x => x.Age, // Ageプロパティを
+					convert: x => x.ToString(), // M -> VMのときは文字列に変換
+					convertBack: x => int.Parse(x)); // VM -> Mの時にはintに変換
+			*/
 		}
 
 		public void Initialize()
 		{
-
 		}
 	}
 }
