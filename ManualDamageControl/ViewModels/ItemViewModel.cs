@@ -85,15 +85,6 @@ namespace ManualDamageControl.ViewModels
 			this.DisplayText = model
 				.ObserveProperty(x => x.DisplayText) // DisplayTextプロパティを監視するIObservableに変換
 				.ToReactiveProperty(); // ReactivePropertyに変換
-
-
-
-			/*this.Age = model
-				.ToReactivePropertyAsSynchronized(
-					x => x.Age, // Ageプロパティを
-					convert: x => x.ToString(), // M -> VMのときは文字列に変換
-					convertBack: x => int.Parse(x)); // VM -> Mの時にはintに変換
-			*/
 		}
 
 		public void Initialize()
