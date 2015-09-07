@@ -13,6 +13,10 @@ namespace ManualDamageControl.Models
 		 * NotificationObjectはプロパティ変更通知の仕組みを実装したオブジェクトです。
 		 */
 
+		private const string NO_DAMAGECONTROL = "ダメコンなし";
+		private const string PUT_DAMAGECONTROL = "帰投したらダメコン付け直せ";
+		private const string EQUIP_DAMAGECONTROL = "ダメコンが発動したらクリック";
+
 
 		#region HasDamageControl変更通知プロパティ
 		private bool _HasDamageControl;
@@ -52,18 +56,18 @@ namespace ManualDamageControl.Models
 				RaisePropertyChanged("IsDamageControl");
 
 				if (value == true)
-					this.DisplayText = "帰投したらダメコン付け直せ";
+					this.DisplayText = PUT_DAMAGECONTROL;
 				else if (value == false)
-					this.DisplayText = "ダメコンが発動したらクリック";
+					this.DisplayText = EQUIP_DAMAGECONTROL;
 				else
-					this.DisplayText = "ダメコンなし";
+					this.DisplayText = NO_DAMAGECONTROL;
 			}
 		}
 		#endregion
 
 
 		#region DisplayText変更通知プロパティ
-		private string _DisplayText = "ダメコンなし";
+		private string _DisplayText = NO_DAMAGECONTROL;
 
 		public string DisplayText
 		{
